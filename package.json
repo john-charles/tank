@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "description": "Commands for managing replicated file systems",
   "main": "index.js",
+  "bin": {
+    "tank": "./bin/tank.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.5.0",
+    "lodash": "^4.17.4",
     "ssh2": "^0.5.4"
   }
 }
