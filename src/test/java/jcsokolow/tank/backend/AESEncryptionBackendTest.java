@@ -74,7 +74,7 @@ public class AESEncryptionBackendTest {
     }
 
     @Test
-    public void putStream() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public void encryptAndDecryptStreamTest() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         Backend cipherBackend = new AESEncryptionBackend(backend, aesKey);
 
