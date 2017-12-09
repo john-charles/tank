@@ -70,6 +70,11 @@ public class AESEncryptionBackendTest {
             public void putStream(String id, InputStream input) throws IOException {
                 bytes.put(id, new Bytes(IOUtils.toByteArray(input)));
             }
+
+            @Override
+            public boolean hasStream(String id) throws IOException {
+                return false;
+            }
         };
     }
 

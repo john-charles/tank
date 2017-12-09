@@ -15,10 +15,8 @@ import java.security.*;
 
 public class AESEncryptionBackend implements Backend {
 
-    SecretKey key;
-    Backend backend;
-
-    private static final String CIPHER_SPEC = "AES/CBC/PKCS7Padding";
+    private SecretKey key;
+    private Backend backend;
 
 
     public AESEncryptionBackend(Backend backend, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException {

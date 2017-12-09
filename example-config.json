@@ -1,0 +1,28 @@
+{
+  "overlay": "/home/user",
+  "filesystems": [
+    {
+      "type":"local",
+      "name":"Local",
+      "overlayRoot": true
+    },
+    {
+      "name":"S3",
+      "type":"composition",
+      "backend": {
+        "type":"encryption",
+        "passphrase": "my secret",
+        "backend": {
+          "type":"s3",
+          "s3bucketName":"my bucket"
+        }
+      }
+    },
+    {
+      "name":"Remote Site",
+      "type":"sftp",
+      "remoteHost":"example.com",
+      "remoteRoot":"/some/path"
+    }
+  ]
+}
