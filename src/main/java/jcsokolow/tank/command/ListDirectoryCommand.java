@@ -1,6 +1,8 @@
-package jcsokolow.tank.task;
+package jcsokolow.tank.command;
 
+import jcsokolow.tank.bo.CommandArguments;
 import jcsokolow.tank.bo.Stats;
+import jcsokolow.tank.config.Configuration;
 import jcsokolow.tank.filesystem.FileSystem;
 
 import java.util.LinkedHashMap;
@@ -8,17 +10,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ListDirectoryTask {
+public class ListDirectoryCommand implements Command {
 
     Map<String, FileSystem> fileSystems;
 
-    public ListDirectoryTask(Map<String, FileSystem> fileSystems) {
+    public ListDirectoryCommand(Configuration configuration, Map<String, FileSystem> fileSystems) {
         this.fileSystems = fileSystems;
     }
 
-    void execute(Map<String, String> arguments) {
+    public void execute(CommandArguments arguments) {
 
-        String path = arguments.get("path");
+        String path = arguments.getSourcePath();
 
         List<String> fsNames = new LinkedList<>();
         Map<String, Map<String, Stats>> listings = new LinkedHashMap<>();
