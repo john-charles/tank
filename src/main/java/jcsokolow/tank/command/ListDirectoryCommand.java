@@ -1,20 +1,20 @@
 package jcsokolow.tank.command;
 
 import jcsokolow.tank.bo.CommandArguments;
+import jcsokolow.tank.bo.CommandErrorType;
 import jcsokolow.tank.bo.Stats;
 import jcsokolow.tank.config.Configuration;
+import jcsokolow.tank.filesystem.FileDoesNotExistException;
+import jcsokolow.tank.filesystem.FileIsWrongTypeException;
 import jcsokolow.tank.filesystem.FileSystem;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ListDirectoryCommand implements Command {
 
-    Map<String, FileSystem> fileSystems;
+    private List<FileSystem> fileSystems;
 
-    public ListDirectoryCommand(Configuration configuration, Map<String, FileSystem> fileSystems) {
+    public ListDirectoryCommand(List<FileSystem> fileSystems) {
         this.fileSystems = fileSystems;
     }
 
@@ -25,15 +25,33 @@ public class ListDirectoryCommand implements Command {
         List<String> fsNames = new LinkedList<>();
         Map<String, Map<String, Stats>> listings = new LinkedHashMap<>();
 
-        for (Map.Entry<String, FileSystem> fs : fileSystems.entrySet()) {
-            Map<String, Stats> results = fs.getValue().listDir(path);
+        for (FileSystem fs : fileSystems) {
+            Map<String, Stats> results = null;
+            try {
 
-            for (Map.Entry<String, Stats> result : results.entrySet()) {
-                Map<String, Stats> entry = listings.computeIfAbsent(result.getKey(), k -> new LinkedHashMap<>());
-                entry.put(fs.getKey(), result.getValue());
+                results = fs.listDir(path);
+
+                if(results != null) {
+
+                    Set<String> keys = results.keySet();
+
+
+                    for (String key : keys) {
+                        Map<String, Stats> entry = listings.computeIfAbsent(key, k -> new LinkedHashMap<>());
+                        entry.put(fs.getName(), results.get(key));
+                    }
+
+                }
+
+
+            } catch (FileDoesNotExistException e) {
+                e.printStackTrace();
+            } catch (FileIsWrongTypeException e) {
+                e.printStackTrace();
             }
 
-            fsNames.add(fs.getKey());
+
+            fsNames.add(fs.getName());
         }
 
         System.out.print("File Name");
@@ -71,6 +89,14 @@ public class ListDirectoryCommand implements Command {
             }
 
             System.out.println();
+        }
+    }
+
+    @Override
+    public void printErrorMessage(CommandErrorType errorType) {
+        switch (errorType) {
+            case MISSING_SOURCE_PATH:
+                System.err.println("Error, please specify a path to list!");
         }
     }
 

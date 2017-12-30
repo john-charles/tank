@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.*;
 
@@ -79,7 +80,7 @@ public class AESEncryptionBackendTest {
     }
 
     @Test
-    public void encryptAndDecryptStreamTest() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public void encryptAndDecryptStreamTest() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException {
 
         Backend cipherBackend = new AESEncryptionBackend(backend, aesKey);
 

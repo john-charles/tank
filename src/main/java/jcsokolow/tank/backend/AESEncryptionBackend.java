@@ -1,6 +1,7 @@
 package jcsokolow.tank.backend;
 
 
+import jcsokolow.tank.service.KeyGenerationService;
 import org.apache.commons.io.IOUtils;
 
 import javax.crypto.Cipher;
@@ -12,6 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 
 public class AESEncryptionBackend implements Backend {
 
@@ -19,9 +21,22 @@ public class AESEncryptionBackend implements Backend {
     private Backend backend;
 
 
-    public AESEncryptionBackend(Backend backend, SecretKey key) throws NoSuchPaddingException, NoSuchAlgorithmException {
-        this.key = key;
+    public AESEncryptionBackend(Backend backend, String key) throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+
+        KeyGenerationService keyGenerationService = new KeyGenerationService(backend);
+
+        this.key = keyGenerationService.getKeyFromPassword(key);
         this.backend = backend;
+    }
+
+    public AESEncryptionBackend(Backend backend, SecretKey aesKey) {
+        this.key = aesKey;
+        this.backend = backend;
+    }
+
+    @Override
+    public boolean hasStream(String id) throws IOException {
+        return backend.hasStream(id);
     }
 
     public InputStream getStream(String id) throws IOException {

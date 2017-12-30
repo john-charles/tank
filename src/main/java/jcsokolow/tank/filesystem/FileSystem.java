@@ -4,9 +4,27 @@ import jcsokolow.tank.bo.Stats;
 
 import java.util.Map;
 
-public interface FileSystem {
+abstract public class FileSystem {
 
-    Stats getStat(String path);
-    Map<String, Stats> listDir(String path);
+    String name;
+    String type;
 
+    abstract Stats getStat(String path);
+    public abstract Map<String, Stats> listDir(String path) throws FileDoesNotExistException, FileIsWrongTypeException;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

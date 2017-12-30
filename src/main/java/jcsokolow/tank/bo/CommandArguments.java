@@ -9,16 +9,20 @@ public class CommandArguments {
     }
 
 
-    public String getCommandName(){
+    public String getCommandName() {
         try {
             return args[0];
         } catch (IndexOutOfBoundsException e){
-            return null;
+            throw new CommandError(CommandErrorType.MISSING_COMMAND_NAME);
         }
     }
 
     public String getSourcePath(){
-        return args[1];
+        try {
+            return args[1];
+        } catch (IndexOutOfBoundsException e){
+            throw new CommandError(CommandErrorType.MISSING_SOURCE_PATH);
+        }
     }
 
 }
