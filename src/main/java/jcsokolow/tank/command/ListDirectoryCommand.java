@@ -27,6 +27,7 @@ public class ListDirectoryCommand implements Command {
 
         for (FileSystem fs : fileSystems) {
             Map<String, Stats> results = null;
+
             try {
 
                 results = fs.listDir(path);
@@ -44,9 +45,7 @@ public class ListDirectoryCommand implements Command {
                 }
 
 
-            } catch (FileDoesNotExistException e) {
-                e.printStackTrace();
-            } catch (FileIsWrongTypeException e) {
+            } catch (FileDoesNotExistException | FileIsWrongTypeException e) {
                 e.printStackTrace();
             }
 
