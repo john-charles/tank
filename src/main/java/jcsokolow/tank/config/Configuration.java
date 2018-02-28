@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jcsokolow.tank.backend.AESEncryptionBackend;
 import jcsokolow.tank.backend.Backend;
 import jcsokolow.tank.backend.S3Backend;
+import jcsokolow.tank.exception.FileSystemInitializationException;
 import jcsokolow.tank.filesystem.CompositionFileSystem;
 import jcsokolow.tank.filesystem.FileSystem;
 import jcsokolow.tank.filesystem.LocalFileSystem;
@@ -35,7 +36,7 @@ public class Configuration {
         return (String) conf.get("overlay");
     }
 
-    public List<FileSystem> getFileSystems() throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, IOException {
+    public List<FileSystem> getFileSystems() throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, IOException, FileSystemInitializationException {
 
         List<FileSystem> fileSystems = new LinkedList<>();
         List<EasyMap> fsList = conf.getListOfMaps("filesystems");
@@ -49,7 +50,7 @@ public class Configuration {
 
     }
 
-    private FileSystem getFileSystem(EasyMap fsDesc) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IOException {
+    private FileSystem getFileSystem(EasyMap fsDesc) throws NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException, IOException, FileSystemInitializationException {
 
         FileSystem fileSystem = null;
         String type = (String) fsDesc.get("type");

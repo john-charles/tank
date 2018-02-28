@@ -21,6 +21,12 @@ public class SFTPFileSystem extends FileSystem {
     public SFTPFileSystem(String remoteHost, String remoteUser, String remoteRoot) throws FileSystemInitializationException {
         super();
         this.jsch = new JSch();
+        //TODO: Make this configurable
+        try {
+            this.jsch.addIdentity("~/.ssh/id_rsa");
+        } catch (JSchException e) {
+            throw new FileSystemInitializationException("Failed to add private key", e);
+        }
         this.remoteHost = remoteHost;
         this.remoteUser = remoteUser;
         this.remoteRoot = remoteRoot;
@@ -31,7 +37,10 @@ public class SFTPFileSystem extends FileSystem {
         try {
 
             this.session = jsch.getSession(remoteUser, remoteHost, 22);
+            this.session.setConfig("StrictHostKeyChecking", "no");
+            this.session.connect();
             this.channel = (ChannelSftp) this.session.openChannel("sftp");
+            this.channel.connect();
             this.channel.cd(remoteRoot);
 
         } catch (JSchException e) {
