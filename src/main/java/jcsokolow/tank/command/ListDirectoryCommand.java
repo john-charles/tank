@@ -12,24 +12,23 @@ import java.util.*;
 
 public class ListDirectoryCommand implements Command {
 
-    private List<FileSystem> fileSystems;
-    private final String SYNCED = "synched";
     private final String OLDER = "older";
     private final String NEWER = "newer";
+    private final String SYNCED = "synched";
+    private final String MISSING = "missing";
+
+    private final FileSystem local;
+    private final List<FileSystem> fileSystems;
 
 
-    public ListDirectoryCommand(List<FileSystem> fileSystems) {
+
+    public ListDirectoryCommand(FileSystem local, List<FileSystem> fileSystems) {
+        this.local = local;
         this.fileSystems = fileSystems;
     }
 
-    private void printPadded(String words, int pad){
-        StringBuilder builder = new StringBuilder(words);
-
-        while(builder.length() < pad){
-            builder.append(" ");
-        }
-
-        System.out.print(builder.toString());
+    private String join(String root, String name){
+        return root + '/' + name;
     }
 
     public void execute(CommandArguments arguments) {
@@ -55,7 +54,7 @@ public class ListDirectoryCommand implements Command {
         for(int i = 0; i < fileSystems.size(); i++){
 
             String fsName = fileSystems.get(i).getName();
-            printPadded(fsName, Math.max(fsName.length(), SYNCED.length()));
+            printPadded(fsName, Math.max(fsName.length(), MISSING.length()));
             if(i < fileSystems.size()){
                 printColumnSep();
             }
@@ -65,9 +64,50 @@ public class ListDirectoryCommand implements Command {
         printRowEnd();
 
 
+        for(String fileName: children){
 
+            printPadded(fileName, maxFileNameLength);
 
+            Stats localStats = local.stat(join(path, fileName));
+            // TODO: Print mtime for local
 
+            for(int i = 0; i < fileSystems.size(); i++){
+
+                String message= "";
+                FileSystem fs = fileSystems.get(i);
+                Stats stats = fs.stat(join(path, fileName));
+
+                if(stats == null){
+                    message = MISSING;
+                } else if(stats.getModifyTime() > localStats.getModifyTime()){
+                    message = NEWER;
+                } else if(stats.getModifyTime() < localStats.getModifyTime()){
+                    message = OLDER;
+                } else {
+                    message = SYNCED;
+                }
+
+                printPadded(message, Math.max(fs.getName().length(), MISSING.length()));
+                if(i < fileSystems.size()){
+                    printColumnSep();
+                }
+
+            }
+
+            printRowEnd();
+
+        }
+
+    }
+
+    private void printPadded(String words, int pad){
+        StringBuilder builder = new StringBuilder(words);
+
+        while(builder.length() < pad){
+            builder.append(" ");
+        }
+
+        System.out.print(builder.toString());
     }
 
     private void printRowEnd() {
