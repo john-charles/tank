@@ -8,6 +8,12 @@ public class Stats {
     long changeTime;
     long modifyTime;
     long accessTime;
+    private String owner;
+    private String group;
+    private int NLinks;
+    private boolean directory;
+    private boolean file;
+    private boolean readable;
 
     public int getMode() {
         return mode;
@@ -55,5 +61,33 @@ public class Stats {
 
     public void setAccessTime(long accessTime) {
         this.accessTime = accessTime;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public int getNLinks() {
+        return NLinks;
+    }
+
+    public boolean isWritable() {
+        return false;
+    }
+
+    public boolean isDirectory() {
+        return directory;
+    }
+
+    public boolean isFile() {
+        return file;
+    }
+
+    public boolean isReadable() {
+        return readable;
     }
 }
