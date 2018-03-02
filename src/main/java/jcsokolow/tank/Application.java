@@ -16,19 +16,19 @@ public class Application {
     public static void main(String[] args) throws Exception {
 
 
-            Configuration configuration = new Configuration();
-            CommandFactory commandFactory = new CommandFactory(configuration.getFileSystems());
+        Configuration configuration = new Configuration();
+        CommandFactory commandFactory = new CommandFactory(configuration.getFileSystems());
 
 
-            CommandArguments arguments = new CommandArguments(args);
-            Command command = commandFactory.getCommand(arguments.getCommandName());
+        CommandArguments arguments = new CommandArguments(args);
+        Command command = commandFactory.getCommand(arguments.getCommandName());
 
-            try {
+        try {
             command.execute(arguments);
 
-            } catch (CommandError error) {
+        } catch (CommandError error) {
 
-            switch(error.getErrorType()){
+            switch (error.getErrorType()) {
 
                 case MISSING_COMMAND_NAME:
                     System.err.println("Please specify a command as the second argument");

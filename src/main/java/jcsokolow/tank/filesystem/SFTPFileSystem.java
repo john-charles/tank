@@ -63,7 +63,7 @@ public class SFTPFileSystem extends FileSystem {
 
         try {
 
-            channel.ls(path, entry -> {
+            channel.ls("./" + path, entry -> {
 
                 String name = entry.getFilename();
                 SftpATTRS attrs = entry.getAttrs();
