@@ -43,7 +43,7 @@ abstract public class FileSystem {
 
     public abstract void rename(String src, String dest) throws IOException;
 
-    public abstract List<String> list();
+    public abstract List<String> list(String path);
 
     public abstract OutputStream writeFile(String path);
 
